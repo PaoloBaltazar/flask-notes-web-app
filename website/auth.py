@@ -30,7 +30,7 @@ def sign_up():
       flash('Password must be at least 7 characters.', category='error')
     else:
       #add user to the database
-      flash('Account created!', category='error')
+      flash('Account created!', category='success')
 
   return render_template("sign_up.html")
 
