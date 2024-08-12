@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_login import LoginManager
 
 #initialize database
 db = SQLAlchemy()
@@ -12,6 +13,9 @@ def create_app():
   app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}' #where data base is stored
   db.init_app(app)
 
+
+
+
   from .views import views
   from .auth import auth
 
@@ -21,6 +25,15 @@ def create_app():
   from .models import User, Note
 
   create_database(app)
+
+  login_manager = LoginManager()
+  login_manager.login_view = 'auth.login'
+  login_manager.init_app(app)
+
+  #Telling flask how we load user and look for the primary key
+  @login_manager.user_loader
+  def load_user(id):
+    return User.query.get(int(id))
 
   return app
 
